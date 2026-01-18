@@ -2,8 +2,10 @@
 Field Site Visit App
 Mobile-friendly Flask app for collecting site visit data
 """
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for, session
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import os
 import json
 from datetime import datetime
@@ -11,7 +13,25 @@ from pathlib import Path
 import base64
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 CORS(app)
+
+# Authentication - users stored in environment or defaults
+# In production, set these as environment variables in Render
+USERS = {
+    os.environ.get('ADMIN_EMAIL', 'kyle@trilakes.co'): {
+        'password_hash': generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'changeme')),
+        'name': 'Kyle'
+    }
+}
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Data storage
 BASE_DIR = Path(__file__).parent
@@ -23,17 +43,42 @@ PHOTOS_DIR = DATA_DIR / "photos"
 PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login page"""
+    if request.method == 'POST':
+        email = request.form.get('email', '').lower().strip()
+        password = request.form.get('password', '')
+        
+        if email in USERS and check_password_hash(USERS[email]['password_hash'], password):
+            session['user'] = email
+            session['name'] = USERS[email]['name']
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error='Invalid email or password')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    """Logout"""
+    session.clear()
+    return redirect(url_for('login'))
+
 @app.route('/')
+@login_required
 def index():
     """Main app page"""
     return render_template('index.html')
 
 @app.route('/visit/<project_id>')
+@login_required
 def visit(project_id):
     """Site visit form for a specific project"""
     return render_template('visit.html', project_id=project_id)
 
 @app.route('/api/projects', methods=['GET'])
+@login_required
 def list_projects():
     """List all projects"""
     projects = []
@@ -50,6 +95,7 @@ def list_projects():
     return jsonify(projects)
 
 @app.route('/api/projects', methods=['POST'])
+@login_required
 def create_project():
     """Create a new project"""
     data = request.json

@@ -1,0 +1,75 @@
+{
+  "id": "rodrigo_boulder_lane",
+  "created": "2026-01-18T12:48:54.190520",
+  "status": "pending",
+  "property": {
+    "address": "13910 Boulder Lane, Larkspur, CO 80118",
+    "parcel_id": "277119403010",
+    "legal": "Lot 65, Woodmoor Mountain 3",
+    "acres": 3.79,
+    "owner": "Thomas & Rachel Watson",
+    "asking_price": 65000,
+    "client": "Rodrigo Dominguez",
+    "client_phone": "281-901-8349",
+    "client_email": "eldude.rodrigo@gmail.com",
+    "elevation_range": "7,405 - 8,203 ft",
+    "relief": "798 ft",
+    "center_lat": 39.16084,
+    "center_lon": -104.932185
+  },
+  "visit_data": {
+    "arrival": {},
+    "access": {},
+    "build_site": {},
+    "septic": {},
+    "soils": {},
+    "well": {},
+    "utilities": {},
+    "vegetation": {},
+    "assessment": {}
+  },
+  "gps_points": [
+    {
+      "label": "Marker",
+      "lat": 39.16031631605025,
+      "lon": -104.93258607380996,
+      "altitude_m": null,
+      "elevation_ft": null,
+      "accuracy": 354,
+      "type": "map_pin",
+      "timestamp": "2026-01-18T13:30:20.826708"
+    },
+    {
+      "label": "Property Corner ",
+      "lat": 39.160756445617075,
+      "lon": -104.93298840516219,
+      "altitude_m": null,
+      "elevation_ft": null,
+      "accuracy": 354,
+      "type": "map_pin",
+      "timestamp": "2026-01-18T13:32:38.619098"
+    },
+    {
+      "label": "Well",
+      "lat": 39.116155,
+      "lon": -104.91216,
+      "altitude_m": null,
+      "elevation_ft": null,
+      "accuracy": 354,
+      "type": "map_pin",
+      "timestamp": "2026-01-18T13:42:26.127972"
+    },
+    {
+      "label": "Well",
+      "lat": 39.16050276751714,
+      "lon": -104.93248951428542,
+      "altitude_m": null,
+      "elevation_ft": null,
+      "accuracy": 354,
+      "type": "map_pin",
+      "timestamp": "2026-01-18T13:42:37.936792"
+    }
+  ],
+  "photos": [],
+  "notes": ""
+}

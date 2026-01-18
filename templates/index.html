@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+    <title>Field App - Site Visits</title>
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="manifest" href="/static/manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>🏔️ Field App</h1>
+            <p>Site Visit Data Collection</p>
+        </header>
+
+        <main class="main-content">
+            <section class="projects-section">
+                <h2>Projects</h2>
+                <div id="projects-list" class="projects-list">
+                    <!-- Projects loaded dynamically -->
+                </div>
+                <button id="new-project-btn" class="btn btn-primary btn-large">
+                    + New Project
+                </button>
+            </section>
+        </main>
+
+        <!-- New Project Modal -->
+        <div id="new-project-modal" class="modal">
+            <div class="modal-content">
+                <h3>New Project</h3>
+                <form id="new-project-form">
+                    <div class="form-group">
+                        <label>Property Address</label>
+                        <input type="text" name="address" required placeholder="123 Main St, City, CO 80000">
+                    </div>
+                    <div class="form-group">
+                        <label>Parcel ID</label>
+                        <input type="text" name="parcel_id" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input type="text" name="client" required placeholder="Client name">
+                    </div>
+                    <div class="form-group">
+                        <label>Client Phone</label>
+                        <input type="tel" name="client_phone" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Acres</label>
+                        <input type="number" name="acres" step="0.01" placeholder="Acreage">
+                    </div>
+                    <div class="button-row">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        // Load projects on page load
+        loadProjects();
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,14 +18,13 @@
     <div class="app-container">
         <!-- Header -->
         <header class="app-header compact">
-            <a href="/" class="back-btn">â† Back</a>
+            <a href="/" class="back-btn">&larr; Back</a>
             <h1 id="property-address">Loading...</h1>
         </header>
 
-        <!-- Property Info Banner -->
-                <!-- Offline Status -->
+        <!-- Offline Status -->
         <div id="offline-bar" class="offline-bar" style="display:none;">
-            <span> Offline Mode</span>
+            <span>Offline Mode</span>
             <span id="pending-sync">0 pending</span>
         </div>
 
@@ -46,7 +45,7 @@
 
         <!-- GPS Status Bar -->
         <div id="gps-status" class="gps-status">
-            <span class="gps-icon">ðŸ“</span>
+            <span class="gps-icon">GPS</span>
             <span id="gps-coords">Waiting for GPS...</span>
             <span id="gps-elevation" class="gps-elevation"></span>
             <span id="gps-accuracy" class="gps-accuracy"></span>
@@ -54,11 +53,11 @@
 
         <!-- Tab Navigation -->
         <nav class="tab-nav">
-            <button class="tab-btn" data-tab="map">ðŸ—ºï¸ Map</button>
-            <button class="tab-btn active" data-tab="checklist">âœ“ Checklist</button>
-            <button class="tab-btn" data-tab="gps">ðŸ“ GPS</button>
-            <button class="tab-btn" data-tab="photos">ðŸ“· Photos</button>
-            <button class="tab-btn" data-tab="notes">ðŸ“ Notes</button>
+            <button class="tab-btn" data-tab="map">Map</button>
+            <button class="tab-btn active" data-tab="checklist">Checklist</button>
+            <button class="tab-btn" data-tab="gps">GPS</button>
+            <button class="tab-btn" data-tab="photos">Photos</button>
+            <button class="tab-btn" data-tab="notes">Notes</button>
         </nav>
 
         <!-- Tab Content -->
@@ -69,9 +68,9 @@
                 <div class="map-container">
                     <div id="site-map"></div>
                     <div class="map-controls">
-                        <button class="btn btn-small" onclick="centerOnMe()">ðŸŽ¯ Center on Me</button>
-                        <button class="btn btn-small btn-primary" onclick="dropPinAtLocation()">ðŸ“ Drop Pin Here</button>
-                        <button class="btn btn-small" onclick="toggleParcel()">ðŸ—ºï¸ Toggle Parcel</button>
+                        <button class="btn btn-small" onclick="centerOnMe()">Center on Me</button>
+                        <button class="btn btn-small btn-primary" onclick="dropPinAtLocation()">Drop Pin Here</button>
+                        <button class="btn btn-small" onclick="toggleParcel()">Toggle Parcel</button>
                     </div>
                     <div class="map-legend">
                         <span class="legend-item"><span class="legend-dot you"></span> You</span>
@@ -79,9 +78,9 @@
                         <span class="legend-item"><span class="legend-line setback"></span> 10' Setback</span>
                     </div>
                     <div class="map-legend">
-                        <span class="legend-item"><span class="legend-circle well"></span> ðŸ’§100'</span>
-                        <span class="legend-item"><span class="legend-circle house"></span> ðŸ 50'</span>
-                        <span class="legend-item"><span class="legend-circle sta"></span> ðŸš½10'</span>
+                        <span class="legend-item"><span class="legend-circle well"></span> Well 100'</span>
+                        <span class="legend-item"><span class="legend-circle house"></span> House 50'</span>
+                        <span class="legend-item"><span class="legend-circle sta"></span> STA 10'</span>
                     </div>
                 </div>
             </section>
@@ -92,7 +91,7 @@
                 <!-- Arrival Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('arrival')">
-                        <span>1ï¸âƒ£ Arrival</span>
+                        <span>1. Arrival</span>
                         <span class="section-status" id="status-arrival">0/6</span>
                     </div>
                     <div class="section-body" id="section-arrival">
@@ -111,11 +110,11 @@
                         <div class="form-inline">
                             <select id="arrival-weather">
                                 <option value="">Select weather</option>
-                                <option value="clear">â˜€ï¸ Clear/Sunny</option>
-                                <option value="cloudy">â˜ï¸ Cloudy</option>
-                                <option value="overcast">ðŸŒ¥ï¸ Overcast</option>
-                                <option value="rain">ðŸŒ§ï¸ Rain</option>
-                                <option value="snow">â„ï¸ Snow</option>
+                                <option value="clear">Clear/Sunny</option>
+                                <option value="cloudy">Cloudy</option>
+                                <option value="overcast">Overcast</option>
+                                <option value="rain">Rain</option>
+                                <option value="snow">Snow</option>
                             </select>
                         </div>
                         
@@ -141,9 +140,9 @@
                         <div class="form-inline">
                             <select id="cell-signal">
                                 <option value="">Signal strength</option>
-                                <option value="good">ðŸ“¶ Good</option>
-                                <option value="weak">ðŸ“¶ Weak</option>
-                                <option value="none">âŒ None</option>
+                                <option value="good">Good</option>
+                                <option value="weak">Weak</option>
+                                <option value="none">None</option>
                             </select>
                         </div>
                     </div>
@@ -152,13 +151,13 @@
                 <!-- Access & Driveway Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('access')">
-                        <span>2ï¸âƒ£ Access & Driveway</span>
+                        <span>2. Access &amp; Driveway</span>
                         <span class="section-status" id="status-access">0/8</span>
                     </div>
                     <div class="section-body collapsed" id="section-access">
                         <label class="check-item">
                             <input type="checkbox" data-section="access" data-item="gps_entry">
-                            <span>ðŸ“ GPS: Driveway entry</span>
+                            <span>GPS: Driveway entry</span>
                         </label>
                         <button class="btn btn-small btn-gps" onclick="captureGPS('driveway_entry')">Capture GPS</button>
                         
@@ -216,7 +215,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="access" data-item="photo_driveway">
-                            <span>ðŸ“· Photos: Driveway route</span>
+                            <span>Photos: Driveway route</span>
                         </label>
                         
                         <label class="check-item">
@@ -232,13 +231,13 @@
                 <!-- Property Corners Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('corners')">
-                        <span>3ï¸âƒ£ Property Corners</span>
+                        <span>3. Property Corners</span>
                         <span class="section-status" id="status-corners">0/4</span>
                     </div>
                     <div class="section-body collapsed" id="section-corners">
                         <label class="check-item">
                             <input type="checkbox" data-section="corners" data-item="corner_ne">
-                            <span>ðŸ“ Corner NE</span>
+                            <span>Corner NE</span>
                         </label>
                         <button class="btn btn-small btn-gps" onclick="captureGPS('corner_ne')">Capture GPS</button>
                         <div class="form-inline btn-group">
@@ -248,7 +247,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="corners" data-item="corner_se">
-                            <span>ðŸ“ Corner SE</span>
+                            <span>Corner SE</span>
                         </label>
                         <button class="btn btn-small btn-gps" onclick="captureGPS('corner_se')">Capture GPS</button>
                         <div class="form-inline btn-group">
@@ -258,7 +257,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="corners" data-item="corner_sw">
-                            <span>ðŸ“ Corner SW</span>
+                            <span>Corner SW</span>
                         </label>
                         <button class="btn btn-small btn-gps" onclick="captureGPS('corner_sw')">Capture GPS</button>
                         <div class="form-inline btn-group">
@@ -268,7 +267,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="corners" data-item="corner_nw">
-                            <span>ðŸ“ Corner NW</span>
+                            <span>Corner NW</span>
                         </label>
                         <button class="btn btn-small btn-gps" onclick="captureGPS('corner_nw')">Capture GPS</button>
                         <div class="form-inline btn-group">
@@ -281,15 +280,15 @@
                 <!-- Build Site Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('buildsite')">
-                        <span>4ï¸âƒ£ Build Site</span>
+                        <span>4. Build Site</span>
                         <span class="section-status" id="status-buildsite">0/8</span>
                     </div>
                     <div class="section-body collapsed" id="section-buildsite">
                         <label class="check-item critical">
                             <input type="checkbox" data-section="buildsite" data-item="gps_house">
-                            <span>ðŸ“ GPS: HOUSE LOCATION</span>
+                            <span>GPS: HOUSE LOCATION</span>
                         </label>
-                        <button class="btn btn-large btn-gps" onclick="captureGPS('house_location')">ðŸ  Capture House GPS</button>
+                        <button class="btn btn-large btn-gps" onclick="captureGPS('house_location')">Capture House GPS</button>
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="buildsite" data-item="slope">
@@ -356,7 +355,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="buildsite" data-item="photos_site">
-                            <span>ðŸ“· Photos: Build site (4 directions)</span>
+                            <span>Photos: Build site (4 directions)</span>
                         </label>
                     </div>
                 </div>
@@ -364,21 +363,21 @@
                 <!-- Septic Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('septic')">
-                        <span>5ï¸âƒ£ Septic System</span>
+                        <span>5. Septic System</span>
                         <span class="section-status" id="status-septic">0/5</span>
                     </div>
                     <div class="section-body collapsed" id="section-septic">
                         <label class="check-item critical">
                             <input type="checkbox" data-section="septic" data-item="gps_tank">
-                            <span>ðŸ“ GPS: SEPTIC TANK</span>
+                            <span>GPS: SEPTIC TANK</span>
                         </label>
-                        <button class="btn btn-large btn-gps" onclick="captureGPS('septic_tank')">ðŸš½ Capture Tank GPS</button>
+                        <button class="btn btn-large btn-gps" onclick="captureGPS('septic_tank')">Capture Tank GPS</button>
                         
                         <label class="check-item critical">
                             <input type="checkbox" data-section="septic" data-item="gps_leach">
-                            <span>ðŸ“ GPS: LEACH FIELD</span>
+                            <span>GPS: LEACH FIELD</span>
                         </label>
-                        <button class="btn btn-large btn-gps" onclick="captureGPS('leach_field')">ðŸŒ¿ Capture Leach GPS</button>
+                        <button class="btn btn-large btn-gps" onclick="captureGPS('leach_field')">Capture Leach GPS</button>
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="septic" data-item="pump_needed">
@@ -410,15 +409,15 @@
                 <!-- Soils Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('soils')">
-                        <span>6ï¸âƒ£ Soils & Geology</span>
+                        <span>6. Soils &amp; Geology</span>
                         <span class="section-status" id="status-soils">0/5</span>
                     </div>
                     <div class="section-body collapsed" id="section-soils">
                         <label class="check-item critical">
                             <input type="checkbox" data-section="soils" data-item="gps_pit">
-                            <span>ðŸ“ GPS: SOIL PIT LOCATION</span>
+                            <span>GPS: SOIL PIT LOCATION</span>
                         </label>
-                        <button class="btn btn-large btn-gps" onclick="captureGPS('soil_pit')">ðŸ•³ï¸ Capture Pit GPS</button>
+                        <button class="btn btn-large btn-gps" onclick="captureGPS('soil_pit')">Capture Pit GPS</button>
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="soils" data-item="surface_soil">
@@ -456,7 +455,7 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="soils" data-item="photos_rock">
-                            <span>ðŸ“· Photos: Rock outcrops</span>
+                            <span>Photos: Rock outcrops</span>
                         </label>
                     </div>
                 </div>
@@ -464,7 +463,7 @@
                 <!-- Well Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('well')">
-                        <span>7ï¸âƒ£ Well</span>
+                        <span>7. Well</span>
                         <span class="section-status" id="status-well">0/3</span>
                     </div>
                     <div class="section-body collapsed" id="section-well">
@@ -479,9 +478,9 @@
                         
                         <label class="check-item critical">
                             <input type="checkbox" data-section="well" data-item="gps_well">
-                            <span>ðŸ“ GPS: WELL LOCATION</span>
+                            <span>GPS: WELL LOCATION</span>
                         </label>
-                        <button class="btn btn-large btn-gps" onclick="captureGPS('well_location')">ðŸ’§ Capture Well GPS</button>
+                        <button class="btn btn-large btn-gps" onclick="captureGPS('well_location')">Capture Well GPS</button>
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="well" data-item="neighbor_wells">
@@ -497,15 +496,15 @@
                 <!-- Utilities Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('utilities')">
-                        <span>8ï¸âƒ£ Utilities</span>
+                        <span>8. Utilities</span>
                         <span class="section-status" id="status-utilities">0/4</span>
                     </div>
                     <div class="section-body collapsed" id="section-utilities">
                         <label class="check-item">
                             <input type="checkbox" data-section="utilities" data-item="gps_power">
-                            <span>ðŸ“ GPS: Power pole/transformer</span>
+                            <span>GPS: Power pole/transformer</span>
                         </label>
-                        <button class="btn btn-small btn-gps" onclick="captureGPS('power_pole')">âš¡ Capture GPS</button>
+                        <button class="btn btn-small btn-gps" onclick="captureGPS('power_pole')">Capture GPS</button>
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="utilities" data-item="power_distance">
@@ -527,16 +526,16 @@
                         
                         <label class="check-item">
                             <input type="checkbox" data-section="utilities" data-item="cell_signal">
-                            <span>ðŸ“¶ Cell signal strength</span>
+                            <span>Cell signal strength</span>
                         </label>
                         <div class="form-inline btn-group">
-                            <button class="btn-option" data-field="cell_signal" data-value="none">âŒ None</button>
-                            <button class="btn-option" data-field="cell_signal" data-value="weak">ðŸ“¶ Weak</button>
-                            <button class="btn-option" data-field="cell_signal" data-value="good">ðŸ“¶ðŸ“¶ Good</button>
-                            <button class="btn-option" data-field="cell_signal" data-value="strong">ðŸ“¶ðŸ“¶ðŸ“¶ Strong</button>
+                            <button class="btn-option" data-field="cell_signal" data-value="none">None</button>
+                            <button class="btn-option" data-field="cell_signal" data-value="weak">Weak</button>
+                            <button class="btn-option" data-field="cell_signal" data-value="good">Good</button>
+                            <button class="btn-option" data-field="cell_signal" data-value="strong">Strong</button>
                         </div>
                         <div class="form-inline">
-                            <input type="text" id="cell-carrier" placeholder="Carrier (AT&T, Verizon, etc.)">
+                            <input type="text" id="cell-carrier" placeholder="Carrier (AT&amp;T, Verizon, etc.)">
                         </div>
                     </div>
                 </div>
@@ -544,7 +543,7 @@
                 <!-- Assessment Section -->
                 <div class="section-card">
                     <div class="section-header" onclick="toggleSection('assessment')">
-                        <span>âœ… Final Assessment</span>
+                        <span>9. Final Assessment</span>
                         <span class="section-status" id="status-assessment">0/4</span>
                     </div>
                     <div class="section-body collapsed" id="section-assessment">
@@ -597,14 +596,14 @@
             <!-- GPS TAB -->
             <section id="tab-gps" class="tab-panel">
                 <div class="gps-panel">
-                    <h3>ðŸ“ GPS Points Captured</h3>
+                    <h3>GPS Points Captured</h3>
                     <div id="gps-points-list" class="gps-points-list">
                         <p class="empty-state">No GPS points captured yet</p>
                     </div>
                     
                     <div class="gps-actions">
                         <button class="btn btn-primary btn-large" onclick="captureGPS('custom')">
-                            ðŸ“ Capture Current Location
+                            Capture Current Location
                         </button>
                     </div>
                 </div>
@@ -613,7 +612,7 @@
             <!-- PHOTOS TAB -->
             <section id="tab-photos" class="tab-panel">
                 <div class="photos-panel">
-                    <h3>ðŸ“· Photos</h3>
+                    <h3>Photos</h3>
                     
                     <div class="photo-capture">
                         <select id="photo-label">
@@ -633,7 +632,7 @@
                             <option value="other">Other</option>
                         </select>
                         <button class="btn btn-primary btn-large" onclick="capturePhoto()">
-                            ðŸ“· Take Photo
+                            Take Photo
                         </button>
                     </div>
                     
@@ -651,39 +650,39 @@
             <!-- NOTES TAB -->
             <section id="tab-notes" class="tab-panel">
                 <div class="notes-panel">
-                    <h3>ðŸ“ Notes & Observations</h3>
+                    <h3>Notes &amp; Observations</h3>
                     
                     <div class="notes-section">
-                        <label>âš ï¸ Concerns / Red Flags</label>
+                        <label>Concerns / Red Flags</label>
                         <textarea id="notes-concerns" rows="4" placeholder="Any concerns or deal breakers..."></textarea>
                     </div>
                     
                     <div class="notes-section">
-                        <label>ðŸ“‹ Key Findings</label>
+                        <label>Key Findings</label>
                         <textarea id="notes-findings" rows="4" placeholder="Summary of key findings..."></textarea>
                     </div>
                     
                     <div class="notes-section">
-                        <label>ðŸ’¡ Recommendations</label>
+                        <label>Recommendations</label>
                         <textarea id="notes-recommendations" rows="4" placeholder="Recommendations for client..."></textarea>
                     </div>
                     
-                    <button class="btn btn-primary" onclick="saveNotes()">ðŸ’¾ Save Notes</button>
+                    <button class="btn btn-primary" onclick="saveNotes()">Save Notes</button>
                 </div>
             </section>
         </main>
 
         <!-- Bottom Action Bar -->
         <footer class="action-bar">
-            <button class="btn btn-secondary" onclick="saveProgress()">ðŸ’¾ Save</button>
-            <button class="btn btn-primary" onclick="completeVisit()">âœ… Complete Visit</button>
+            <button class="btn btn-secondary" onclick="saveProgress()">Save</button>
+            <button class="btn btn-primary" onclick="completeVisit()">Complete Visit</button>
         </footer>
     </div>
 
     <!-- GPS Capture Modal -->
     <div id="gps-modal" class="modal">
         <div class="modal-content">
-            <h3>ðŸ“ Capture GPS Point</h3>
+            <h3>Capture GPS Point</h3>
             <div id="gps-modal-status" class="gps-modal-status">
                 Getting location...
             </div>
@@ -700,7 +699,7 @@
                 <input type="text" id="gps-lon" readonly>
             </div>
             <div class="form-group">
-                <label>â›°ï¸ Elevation (ft)</label>
+                <label>Elevation (ft)</label>
                 <input type="text" id="gps-elev" readonly>
             </div>
             <div class="form-group">
@@ -730,6 +729,3 @@
     </script>
 </body>
 </html>
-
-
-

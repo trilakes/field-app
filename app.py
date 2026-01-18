@@ -145,6 +145,11 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@app.route('/sw.js')
+def service_worker():
+    """Serve service worker from root"""
+    return send_file('static/sw.js', mimetype='application/javascript')
+
 @app.route('/')
 @login_required
 def index():

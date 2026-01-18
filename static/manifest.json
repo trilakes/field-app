@@ -1,16 +1,22 @@
-{
-    "name": "Field App",
-    "short_name": "FieldApp",
-    "description": "Site Visit Data Collection",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#2c5530",
-    "theme_color": "#2c5530",
-    "icons": [
-        {
-            "src": "/static/icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        }
-    ]
+﻿{
+  "name": "Site Plans Field App",
+  "short_name": "Field App",
+  "description": "Mobile field data collection for site visits",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a2744",
+  "theme_color": "#1a2744",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

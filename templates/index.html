@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
 <body>
     <div class="app-container">
         <header class="app-header">
-            <h1>🏔️ Field App</h1>
+            <h1>ðŸ”ï¸ Field App</h1>
             <p>Site Visit Data Collection</p>
         </header>
 
@@ -65,10 +65,22 @@
         </div>
     </div>
 
+    <script src="/static/js/offline.js"></script>
     <script src="/static/js/app.js"></script>
     <script>
         // Load projects on page load
         loadProjects();
     </script>
+    <script src="/static/js/offline.js"></script>
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW error:', err));
+        }
+    </script>
 </body>
 </html>
+
+

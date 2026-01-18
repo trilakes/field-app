@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Field App - Main JavaScript
  */
 
@@ -16,11 +16,14 @@ async function loadProjects() {
         }
         
         container.innerHTML = projects.map(p => `
+            <div class="project-card-wrapper">
             <a href="/visit/${p.id}" class="project-card">
                 <h3>${p.address}</h3>
                 <p>Client: ${p.client}</p>
                 <span class="project-status ${p.status}">${p.status}</span>
             </a>
+            <button class="btn-offline" onclick="event.stopPropagation(); downloadForOffline('${p.id}')"> Offline</button>
+            </div>
         `).join('');
         
     } catch (error) {
@@ -76,3 +79,36 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     });
 });
+
+
+// Download project for offline use
+async function downloadForOffline(projectId) {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Downloading...';
+    btn.disabled = true;
+    
+    try {
+        if (window.OfflineManager) {
+            const success = await window.OfflineManager.downloadProjectForOffline(projectId);
+            if (success) {
+                btn.textContent = ' Ready';
+                btn.style.background = '#4caf50';
+            } else {
+                btn.textContent = ' Failed';
+                btn.style.background = '#f44336';
+            }
+        } else {
+            btn.textContent = 'No offline support';
+        }
+    } catch (error) {
+        console.error('Download error:', error);
+        btn.textContent = ' Error';
+    }
+    
+    setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+    }, 3000);
+}

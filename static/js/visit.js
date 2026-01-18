@@ -7,6 +7,51 @@ let projectData = null;
 let currentGPS = null;
 let watchId = null;
 let pendingGPSLabel = null;
+let isOffline = !navigator.onLine;
+
+// Track online/offline status
+window.addEventListener('online', () => { 
+    isOffline = false; 
+    updateOfflineUI();
+    // Sync pending data
+    if (window.OfflineManager) {
+        window.OfflineManager.syncPendingData();
+    }
+});
+window.addEventListener('offline', () => { 
+    isOffline = true; 
+    updateOfflineUI();
+});
+
+// Update offline UI indicator
+async function updateOfflineUI() {
+    const bar = document.getElementById('offline-bar');
+    const pendingEl = document.getElementById('pending-sync');
+    
+    if (!bar) return;
+    
+    if (!navigator.onLine) {
+        bar.style.display = 'flex';
+        if (window.OfflineManager) {
+            const count = await window.OfflineManager.getUnsyncedCount();
+            pendingEl.textContent = `${count} pending`;
+        }
+    } else {
+        if (window.OfflineManager) {
+            const count = await window.OfflineManager.getUnsyncedCount();
+            if (count > 0) {
+                bar.style.display = 'flex';
+                bar.classList.add('syncing');
+                bar.querySelector('span').textContent = '🔄 Syncing...';
+                pendingEl.textContent = `${count} items`;
+            } else {
+                bar.style.display = 'none';
+            }
+        } else {
+            bar.style.display = 'none';
+        }
+    }
+}
 
 // Initialize visit page
 async function initVisit(id) {
@@ -23,45 +68,72 @@ async function initVisit(id) {
     
     // Load saved state from localStorage
     loadLocalState();
+    
+    // Update offline status
+    updateOfflineUI();;
 }
 
-// Load project data
+// Load project data - with offline fallback
 async function loadProject() {
     try {
-        const response = await fetch(`/api/projects/${projectId}`);
-        projectData = await response.json();
-        
-        // Update UI with project data
-        document.getElementById('property-address').textContent = 
-            projectData.property?.address || 'Unknown Address';
-        document.getElementById('client-name').textContent = 
-            projectData.property?.client || '-';
-        document.getElementById('parcel-id').textContent = 
-            projectData.property?.parcel_id || '-';
-        document.getElementById('acres').textContent = 
-            projectData.property?.acres ? `${projectData.property.acres} acres` : '-';
-        
-        // Load GPS points
-        updateGPSList();
-        
-        // Load photos
-        updatePhotosList();
-        
-        // Load notes
-        if (projectData.notes) {
-            const notes = projectData.notes;
-            document.getElementById('notes-concerns').value = notes.concerns || '';
-            document.getElementById('notes-findings').value = notes.findings || '';
-            document.getElementById('notes-recommendations').value = notes.recommendations || '';
+        // Try online first
+        if (navigator.onLine) {
+            const response = await fetch(`/api/projects/${projectId}`);
+            if (response.ok) {
+                projectData = await response.json();
+                // Cache for offline
+                if (window.OfflineManager) {
+                    await window.OfflineManager.saveProjectLocal(projectData);
+                }
+            } else {
+                throw new Error('Server error');
+            }
+        } else {
+            throw new Error('Offline');
         }
-        
-        // Restore checklist state
-        restoreChecklistState();
-        
     } catch (error) {
-        console.error('Error loading project:', error);
-        alert('Error loading project data');
+        console.log('Loading from offline cache...');
+        // Try offline cache
+        if (window.OfflineManager) {
+            projectData = await window.OfflineManager.getProjectLocal(projectId);
+            if (projectData) {
+                console.log('Loaded from offline cache');
+            }
+        }
     }
+    
+    if (!projectData) {
+        console.error('Could not load project');
+        alert('Error loading project data');
+        return;
+    }
+    
+    // Update UI with project data
+    document.getElementById('property-address').textContent = 
+        projectData.property?.address || 'Unknown Address';
+    document.getElementById('client-name').textContent = 
+        projectData.property?.client || '-';
+    document.getElementById('parcel-id').textContent = 
+        projectData.property?.parcel_id || '-';
+    document.getElementById('acres').textContent = 
+        projectData.property?.acres ? `${projectData.property.acres} acres` : '-';
+    
+    // Load GPS points
+    updateGPSList();
+    
+    // Load photos
+    updatePhotosList();
+    
+    // Load notes
+    if (projectData.notes) {
+        const notes = projectData.notes;
+        document.getElementById('notes-concerns').value = notes.concerns || '';
+        document.getElementById('notes-findings').value = notes.findings || '';
+        document.getElementById('notes-recommendations').value = notes.recommendations || '';
+    }
+    
+    // Restore checklist state
+    restoreChecklistState();
 }
 
 // GPS Tracking - iOS Optimized
@@ -317,12 +389,20 @@ async function saveGPSPoint() {
     };
     
     try {
-        // Save to server
-        await fetch(`/api/projects/${projectId}/gps`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(point)
-        });
+        if (navigator.onLine) {
+            // Save to server
+            await fetch(`/api/projects/${projectId}/gps`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(point)
+            });
+        } else {
+            // Offline - save locally and queue for sync
+            if (window.OfflineManager) {
+                await window.OfflineManager.saveGPSPointLocal(projectId, point);
+                await window.OfflineManager.addToSyncQueue('POST', `/api/projects/${projectId}/gps`, point);
+            }
+        }
         
         // Update local data
         if (!projectData.gps_points) projectData.gps_points = [];
@@ -335,11 +415,22 @@ async function saveGPSPoint() {
         closeGPSModal();
         
         // Show confirmation
-        showToast(`📍 ${label} saved!`);
+        showToast(`📍 ${label} saved!` + (navigator.onLine ? '' : ' (offline)'));
         
     } catch (error) {
         console.error('Error saving GPS point:', error);
-        alert('Error saving GPS point');
+        // Try offline save as fallback
+        if (window.OfflineManager) {
+            await window.OfflineManager.saveGPSPointLocal(projectId, point);
+            await window.OfflineManager.addToSyncQueue('POST', `/api/projects/${projectId}/gps`, point);
+            if (!projectData.gps_points) projectData.gps_points = [];
+            projectData.gps_points.push(point);
+            updateGPSList();
+            closeGPSModal();
+            showToast(`📍 ${label} saved offline - will sync later`);
+        } else {
+            alert('Error saving GPS point');
+        }
     }
 }
 
@@ -575,36 +666,75 @@ async function handlePhotoCapture(event) {
         // Compress the image (iPhone photos are 12MP+)
         const photoData = await compressImage(file, 1600, 0.8);
         
-        const response = await fetch(`/api/projects/${projectId}/photo`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                photo: photoData,
-                label: label,
-                gps: currentGPS,
-                timestamp: new Date().toISOString()
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            // Update local data
+        if (navigator.onLine) {
+            const response = await fetch(`/api/projects/${projectId}/photo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    photo: photoData,
+                    label: label,
+                    gps: currentGPS,
+                    timestamp: new Date().toISOString()
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Update local data
+                if (!projectData.photos) projectData.photos = [];
+                projectData.photos.push({
+                    id: result.photo_id,
+                    label: label,
+                    data: photoData
+                });
+                
+                updatePhotosList();
+                showToast(`✅ ${label} photo saved!`);
+            } else {
+                throw new Error(result.error || 'Upload failed');
+            }
+        } else {
+            // Offline - save locally and queue
+            if (window.OfflineManager) {
+                await window.OfflineManager.savePhotoLocal(projectId, photoData, label);
+                await window.OfflineManager.addToSyncQueue('POST', `/api/projects/${projectId}/photo`, {
+                    photo: photoData,
+                    label: label,
+                    gps: currentGPS,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
             if (!projectData.photos) projectData.photos = [];
             projectData.photos.push({
-                id: result.photo_id,
+                id: Date.now(),
                 label: label,
                 data: photoData
             });
             
             updatePhotosList();
-            showToast(`✅ ${label} photo saved!`);
-        } else {
-            throw new Error(result.error || 'Upload failed');
+            showToast(`✅ ${label} saved offline - will sync later`);
         }
     } catch (error) {
         console.error('Error saving photo:', error);
-        showToast('❌ Error saving photo');
+        // Try offline fallback
+        if (window.OfflineManager) {
+            const photoData = await compressImage(file, 1600, 0.8);
+            await window.OfflineManager.savePhotoLocal(projectId, photoData, label);
+            await window.OfflineManager.addToSyncQueue('POST', `/api/projects/${projectId}/photo`, {
+                photo: photoData,
+                label: label,
+                gps: currentGPS,
+                timestamp: new Date().toISOString()
+            });
+            if (!projectData.photos) projectData.photos = [];
+            projectData.photos.push({ id: Date.now(), label: label, data: photoData });
+            updatePhotosList();
+            showToast(`✅ ${label} saved offline`);
+        } else {
+            showToast('❌ Error saving photo');
+        }
     }
     
     // Reset input for next photo
@@ -638,16 +768,31 @@ async function saveNotes() {
     projectData.notes = notes;
     
     try {
-        await fetch(`/api/projects/${projectId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(projectData)
-        });
+        if (navigator.onLine) {
+            await fetch(`/api/projects/${projectId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(projectData)
+            });
+        } else {
+            // Offline - save locally and queue
+            if (window.OfflineManager) {
+                await window.OfflineManager.saveProjectLocal(projectData);
+                await window.OfflineManager.addToSyncQueue('PUT', `/api/projects/${projectId}`, projectData);
+            }
+        }
         
-        showToast('📝 Notes saved!');
+        showToast('📝 Notes saved!' + (navigator.onLine ? '' : ' (offline)'));
     } catch (error) {
         console.error('Error saving notes:', error);
-        alert('Error saving notes');
+        // Fallback to offline
+        if (window.OfflineManager) {
+            await window.OfflineManager.saveProjectLocal(projectData);
+            await window.OfflineManager.addToSyncQueue('PUT', `/api/projects/${projectId}`, projectData);
+            showToast('📝 Notes saved offline');
+        } else {
+            alert('Error saving notes');
+        }
     }
 }
 

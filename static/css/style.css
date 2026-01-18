@@ -1060,3 +1060,48 @@ textarea:focus {
 .leaflet-popup-content {
     margin: 12px;
 }
+
+/* Offline Mode Styles */
+.offline-bar {
+    background: #ff9800;
+    color: #000;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.offline-bar.syncing {
+    background: #2196f3;
+    color: white;
+}
+
+.btn-offline {
+    background: #ff9800;
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.btn-offline:hover {
+    background: #f57c00;
+}
+
+#offline-toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a2744;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;
+}

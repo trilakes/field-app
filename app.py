@@ -100,9 +100,15 @@ except Exception as e:
     print(f"Database init error: {e}")
 
 # Authentication - users stored in environment or defaults
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'kyle@trilakes.co').lower().strip()
+ADMIN_PASSWORD = str(os.environ.get('ADMIN_PASSWORD', 'changeme'))
+
+print(f"[Auth] Admin email configured: {ADMIN_EMAIL}")
+print(f"[Auth] Password length: {len(ADMIN_PASSWORD)}")
+
 USERS = {
-    os.environ.get('ADMIN_EMAIL', 'kyle@trilakes.co'): {
-        'password_hash': generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'changeme')),
+    ADMIN_EMAIL: {
+        'password_hash': generate_password_hash(ADMIN_PASSWORD),
         'name': 'Kyle'
     }
 }
@@ -128,13 +134,18 @@ def login():
     """Login page"""
     if request.method == 'POST':
         email = request.form.get('email', '').lower().strip()
-        password = request.form.get('password', '')
+        password = str(request.form.get('password', ''))
+        
+        print(f"[Auth] Login attempt: {email}")
+        print(f"[Auth] Email in USERS: {email in USERS}")
         
         if email in USERS and check_password_hash(USERS[email]['password_hash'], password):
             session['user'] = email
             session['name'] = USERS[email]['name']
+            print(f"[Auth] Login successful for {email}")
             return redirect(url_for('index'))
         else:
+            print(f"[Auth] Login failed for {email}")
             return render_template('login.html', error='Invalid email or password')
     
     return render_template('login.html')

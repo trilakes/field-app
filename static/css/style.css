@@ -1105,3 +1105,11 @@ textarea:focus {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     display: none;
 }
+
+/* Header Logo */
+.header-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
